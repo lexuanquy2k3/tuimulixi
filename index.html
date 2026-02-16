@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Pacifico&display=swap" rel="stylesheet">
-    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧧</text></svg>">
     <style>
         body {
             background: radial-gradient(circle, #ff4b2b 0%, #d41414 100%);
@@ -75,12 +75,18 @@
 <body class="text-white flex flex-col justify-between">
 
     <div id="startOverlay" class="fixed inset-0 flex flex-col items-center justify-center z-[5000] bg-[#d41414]">
-        <div class="text-center p-8 border-4 border-yellow-500 rounded-[3rem] bg-red-600 shadow-2xl mx-4">
-            <h2 class="tet-font text-5xl md:text-7xl mb-10 text-yellow-300 drop-shadow-lg">XUÂN Bính Ngọ 2026</h2>
-            <button onclick="startExperience()" class="px-12 py-6 bg-yellow-500 text-red-700 rounded-full font-bold text-3xl animate-bounce shadow-[0_10px_0_rgb(180,130,0)] hover:scale-105 active:translate-y-1 active:shadow-none transition-all uppercase">
+        <div class="text-center p-8 border-4 border-yellow-500 rounded-[3rem] bg-red-600 shadow-2xl mx-4 max-w-sm w-full">
+            <h2 class="tet-font text-5xl md:text-6xl mb-10 text-yellow-300 drop-shadow-lg">XUÂN Bính Ngọ 2026</h2>
+            
+            <div class="mb-8">
+                <input type="text" id="playerNameInput" placeholder="Nhập tên của bạn..." 
+                    class="w-full px-4 py-3 rounded-xl bg-red-700 border-2 border-yellow-500 text-white text-center text-lg outline-none placeholder:text-red-300 focus:border-white transition-all">
+            </div>
+
+            <button onclick="startExperience()" class="w-full px-12 py-5 bg-yellow-500 text-red-700 rounded-full font-bold text-2xl animate-bounce shadow-[0_10px_0_rgb(180,130,0)] hover:scale-105 active:translate-y-1 active:shadow-none transition-all uppercase">
                 Hái Lộc Đầu Xuân
             </button>
-            <p class="mt-6 text-yellow-200 opacity-80 uppercase tracking-widest text-sm font-bold italic">Chạm để chơi</p>
+            <p class="mt-6 text-yellow-200 opacity-80 uppercase tracking-widest text-xs font-bold italic">Vui lòng nhập tên để bắt đầu</p>
         </div>
     </div>
 
@@ -116,39 +122,50 @@
 </div>
 
     <script>
+        // Biến lưu trữ tên người chơi toàn cục
+        let currentPlayerName = "Khách Xuân";
+
+        function saveToDatabase(username, rewardValue) {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzPnmuLsLw291bXiMxnO9hrnORQALRL05vGbREzhbSJA-jczCOF5mwTbvrSikNgjDKwkA/exec'; 
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: username,
+                    reward: rewardValue
+                })
+            }).then(() => console.log("Lưu lộc thành công!"))
+              .catch(error => console.error("Lỗi lưu lộc:", error));
+        }
+
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function playSound(type) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+        function playSound(type) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
-    if (type === 'hover') {
-        // Âm thanh gốc mới: Tiếng gõ nhẹ vào thủy tinh (Tần số cao, tắt cực nhanh)
-        osc.type = 'sine'; 
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Nốt La cao (A5) tạo sự thanh thoát
-        
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime); // Âm lượng rất nhỏ để không gây chói
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); 
-        
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-    } else {
-        // Âm thanh gốc mới: Tiếng chuông khánh ngân vang (Hòa âm của 2 nốt nhạc)
-        osc.type = 'sine'; 
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // Nốt Mi (E5)
-        // Trượt nhanh lên nốt Đô rất cao (C6) tạo cảm giác mở ra sự may mắn
-        osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1);
-        
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime); 
-        // Ngân dài hơn một chút (0.8s) để tạo cảm giác sang trọng
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-        
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.8);
-    }
-}
+            if (type === 'hover') {
+                osc.type = 'sine'; 
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); 
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } else {
+                osc.type = 'sine'; 
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime); 
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.8);
+            }
+        }
 
         const myRewards = [
             "🧧 Lì xì 100k", "🍬 Giảm Giá 10%", "💰 Lì xì 20k",
@@ -193,24 +210,32 @@
         }
 
         function startExperience() {
+            const nameInput = document.getElementById('playerNameInput').value.trim();
+            if (nameInput === "") {
+                alert("Bạn ơi, hãy nhập tên để nhận lộc đầu năm nhé! ✨");
+                return;
+            }
+            currentPlayerName = nameInput; // Lưu tên vào biến toàn cục
+
             audioCtx.resume();
             document.getElementById('startOverlay').style.display = 'none';
             createFlowers();
             initGame();
         }
 
-        function openLixi(reward, element) {
+        async function openLixi(reward, element) {
+            if (element.classList.contains('explode')) return;
+
             playSound('open');
-            
-            // 1. Kích hoạt hiệu ứng nổ tung bao lì xì
             element.classList.add('explode');
 
-            // Đợi một chút (300ms) để thấy hiệu ứng nổ rồi mới hiện Modal kết quả
+            // Gửi dữ liệu với tên đã nhập
+            saveToDatabase(currentPlayerName, reward);
+
             setTimeout(() => {
                 document.getElementById('rewardText').innerText = reward;
                 document.getElementById('resultModal').classList.remove('hidden');
 
-                // 2. Bắn pháo hoa ăn mừng tại mục kết quả
                 const end = Date.now() + 3000;
                 (function frame() {
                     confetti({ 
