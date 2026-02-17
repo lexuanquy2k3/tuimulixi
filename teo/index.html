@@ -54,7 +54,6 @@
             100% { transform: translateY(-20px) rotate(0); }
         }
 
-        /* HIỆU ỨNG NỔ TUNG LÌ XÌ */
         .explode {
             animation: explodeOut 0.4s forwards;
             pointer-events: none;
@@ -108,21 +107,17 @@
     </footer>
 
     <div id="resultModal" class="hidden fixed inset-0 modal-overlay flex items-center justify-center z-[2000] p-4">
-    <div class="bg-white text-red-700 p-6 md:p-12 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl text-center max-w-[85%] md:max-w-sm w-full border-[6px] md:border-[10px] border-yellow-500 relative transform scale-95 md:scale-100">
-        <div class="absolute -top-10 md:-top-14 left-1/2 -translate-x-1/2 text-5xl md:text-7xl">🎁</div>
-        
-        <h2 class="text-sm md:text-lg font-bold mb-1 md:mb-2 opacity-50 uppercase tracking-widest">Bạn nhận được</h2>
-        
-        <div id="rewardText" class="text-2xl md:text-4xl my-6 md:my-8 font-black text-red-600 uppercase leading-tight break-words"></div>
-        
-        <button onclick="closeModal()" class="bg-red-600 text-white w-full py-3 md:py-4 rounded-xl md:rounded-2xl font-bold hover:bg-red-700 transition-all text-lg md:text-xl shadow-lg">
-            NHẬN LỘC
-        </button>
+        <div class="bg-white text-red-700 p-6 md:p-12 rounded-[2.5rem] md:rounded-[3rem] shadow-2xl text-center max-w-[85%] md:max-w-sm w-full border-[6px] md:border-[10px] border-yellow-500 relative transform scale-95 md:scale-100">
+            <div class="absolute -top-10 md:-top-14 left-1/2 -translate-x-1/2 text-5xl md:text-7xl">🎁</div>
+            <h2 class="text-sm md:text-lg font-bold mb-1 md:mb-2 opacity-50 uppercase tracking-widest">Bạn nhận được</h2>
+            <div id="rewardText" class="text-2xl md:text-4xl my-6 md:my-8 font-black text-red-600 uppercase leading-tight break-words"></div>
+            <button onclick="closeModal()" class="bg-red-600 text-white w-full py-3 md:py-4 rounded-xl md:rounded-2xl font-bold hover:bg-red-700 transition-all text-lg md:text-xl shadow-lg">
+                NHẬN LỘC
+            </button>
+        </div>
     </div>
-</div>
 
     <script>
-        // Biến lưu trữ tên người chơi toàn cục
         let currentPlayerName = "Khách Xuân";
 
         function saveToDatabase(username, rewardValue) {
@@ -215,9 +210,11 @@
                 alert("Bạn ơi, hãy nhập tên để nhận lộc đầu năm nhé! ✨");
                 return;
             }
-            currentPlayerName = nameInput; // Lưu tên vào biến toàn cục
+            currentPlayerName = nameInput; 
 
-            audioCtx.resume();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
             document.getElementById('startOverlay').style.display = 'none';
             createFlowers();
             initGame();
@@ -229,7 +226,6 @@
             playSound('open');
             element.classList.add('explode');
 
-            // Gửi dữ liệu với tên đã nhập
             saveToDatabase(currentPlayerName, reward);
 
             setTimeout(() => {
