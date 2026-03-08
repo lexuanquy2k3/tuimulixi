@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Mẹ yêu 8/3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600;700&display=swap');
+        
+        body { 
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Background mới: Vườn hoa mẫu đơn sang trọng */
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.5) blur(2px);
+            z-index: -2;
+            transition: all 1.2s ease-in-out;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,182,193,0.15) 0%, rgba(0,0,0,0.4) 100%);
+            z-index: -1;
+        }
+
+        .font-handwriting { font-family: 'Dancing Script', cursive; }
+
+        .slide { 
+            display: none; 
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .slide.active { 
+            display: flex; 
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-flower {
+            background: linear-gradient(45deg, #ff6a95, #ff4d6d, #ff8fa3);
+            background-size: 200% auto;
+            transition: 0.5s;
+        }
+        .btn-flower:hover {
+            background-position: right center;
+            transform: scale(1.05);
+        }
+
+        .flower-drop {
+            position: fixed;
+            top: -10%;
+            z-index: 100;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex items-center justify-center relative">
+
+    <div class="bg-image" id="bgImg"></div>
+    <div class="overlay"></div>
+
+    <div id="slide1" class="slide active h-full w-full flex-col items-center justify-center p-4">
+        <div class="glass-box p-10 md:p-16 rounded-[40px] max-w-lg w-full text-center">
+            <span class="text-6xl mb-6 block animate-bounce">🌸</span>
+            <h1 class="text-5xl font-bold text-pink-600 mb-6 font-handwriting">Chào Mẹ yêu!</h1>
+            <p class="text-gray-700 text-xl font-medium mb-8">Hôm nay là một ngày đặc biệt, con có điều này muốn gửi tới Mẹ...</p>
+            <button onclick="nextSlide(2)" class="btn-flower text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg mx-auto flex items-center gap-2">
+                <span>🌸</span> Mở quà Mẹ nhé <span>🌸</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="slide2" class="slide h-full w-full flex-col items-center justify-center p-4">
+        <div class="glass-box p-10 md:p-16 rounded-[40px] max-w-2xl w-full text-center">
+            <p class="text-3xl md:text-5xl text-rose-600 font-handwriting leading-relaxed mb-8">
+                "Cảm ơn Mẹ đã luôn là bến đỗ bình yên nhất, yêu thương con bằng tất cả những gì Mẹ có."
+            </p>
+            <button onclick="nextSlide(3)" class="btn-flower text-white px-8 py-3 rounded-full font-bold text-lg shadow-md mx-auto">
+                <span>🌷</span> Tiếp tục <span>🌷</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="slide3" class="slide h-full w-full flex-col items-center justify-center p-4">
+        <div class="glass-box p-8 md:p-14 rounded-[40px] max-w-4xl w-full text-center">
+            <h2 class="font-bold text-pink-600 mb-10 font-handwriting text-5xl">Gửi Mẹ ngàn lời chúc</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-800 mb-10">
+                <div class="p-6 rounded-3xl bg-white/50 border border-white">
+                    <p class="text-2xl font-handwriting font-bold text-rose-500">Bình An</p>
+                    <p class="mt-2 text-sm">Để mỗi ngày của Mẹ đều là một ngày hạnh phúc.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-white/50 border border-white">
+                    <p class="text-2xl font-handwriting font-bold text-rose-500">Sức Khỏe</p>
+                    <p class="mt-2 text-sm">Để Mẹ mãi là điểm tựa vững chắc cho con.</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-white/50 border border-white">
+                    <p class="text-2xl font-handwriting font-bold text-rose-500">Nụ Cười</p>
+                    <p class="mt-2 text-sm">Vì nụ cười của Mẹ là điều đẹp nhất thế gian.</p>
+                </div>
+            </div>
+            <button onclick="nextSlide(4)" class="btn-flower text-white px-12 py-4 rounded-full font-bold text-xl shadow-xl mx-auto">
+                <span>🌺</span> Điều bất ngờ cuối cùng <span>🌺</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="slide4" class="slide h-full w-full flex-col items-center justify-center p-4">
+        <div class="glass-box p-12 md:p-20 rounded-[50px] max-w-2xl w-full text-center relative overflow-hidden">
+            <h2 class="text-6xl md:text-8xl font-bold text-pink-600 mb-8 font-handwriting">Chúc mừng 8/3!</h2>
+            <div class="animate-pulse">
+                <p class="text-3xl text-rose-700 mb-6 font-bold uppercase tracking-widest">Con yêu Mẹ nhiều lắm!</p>
+            </div>
+            <p class="text-gray-600 text-lg italic mb-10">Món quà thật của con đang chờ Mẹ ở phòng khách đó ạ! ❤️</p>
+            <button onclick="nextSlide(1)" class="relative z-10 text-gray-400 text-sm hover:text-pink-500 transition underline">Xem lại từ đầu</button>
+        </div>
+    </div>
+
+    <script>
+        const flowers = ['🌸', '🌺', '🌷', '🌼', '🌹', '💖', '✨'];
+        let flowerInterval;
+
+        function createFlower(isExplosion = false) {
+            const f = document.createElement('div');
+            f.className = 'flower-drop';
+            f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.fontSize = (Math.random() * (isExplosion ? 2.5 : 1.2) + 1.2) + 'rem';
+            f.style.animationDuration = (Math.random() * (isExplosion ? 2 : 4) + 2) + 's';
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 5000);
+        }
+
+        function triggerFinalExplosion() {
+            const duration = 10 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                // Bắn pháo hoa từ trái
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0, y: 0.8 },
+                    colors: ['#ff6a95', '#ff4d6d', '#ffffff']
+                });
+                // Bắn pháo hoa từ phải
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1, y: 0.8 },
+                    colors: ['#ff6a95', '#ff4d6d', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+            
+            // Một cú nổ lớn ở giữa ngay khi vào trang
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0a54', '#ff477e', '#ff7096', '#ffd700']
+            });
+        }
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            const bgImg = document.getElementById('bgImg');
+
+            // Xử lý logic từng slide
+            if (n === 4) {
+                bgImg.style.filter = "brightness(0.8) blur(0px) scale(1.05)";
+                clearInterval(flowerInterval);
+                flowerInterval = setInterval(() => createFlower(true), 200);
+                setTimeout(triggerFinalExplosion, 500);
+            } else {
+                bgImg.style.filter = "brightness(0.5) blur(2px) scale(1)";
+                clearInterval(flowerInterval);
+                flowerInterval = setInterval(() => createFlower(false), 800);
+            }
+
+            // Hiện slide mới
+            const next = document.getElementById('slide' + n);
+            document.querySelectorAll('.slide').forEach(s => s.style.display = 'none');
+            next.style.display = 'flex';
+            setTimeout(() => next.classList.add('active'), 50);
+        }
+
+        // Khởi chạy ban đầu
+        flowerInterval = setInterval(() => createFlower(false), 800);
+    </script>
+</body>
+</html>
